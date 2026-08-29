@@ -45,7 +45,8 @@ code --install-extension caspian-emulator-chinese-X.Y.Z.vsix
 | 侧边栏树节点 | 全汉化 |
 | 状态栏 | 全汉化 |
 | QuickPick 选择菜单 | 入口汉化（子选项保持原文） |
-| 设置项描述 | 英文（package.json 限制） |
+| 设置项描述 | 全汉化 |
+| Webview 面板 | 中文界面 |
 
 ## 快捷键
 

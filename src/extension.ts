@@ -243,10 +243,46 @@ const RUNTIME_STRING_REPLACEMENTS: [string, string][] = [
   ['No device selected.', '未选择设备。'],
   ['Connect a device or launch an emulator to browse its files.', '连接设备或启动模拟器以浏览其文件。'],
   ['Select Device', '选择设备'],
-];
 
-// ============================================================
-// Patchers
+  // Settings descriptions
+  ['Path to the Android SDK root directory. Leave empty for auto-detection.', 'Android SDK 根目录路径。留空则自动检测。'],
+  ['Additional arguments to pass when launching the emulator.', '启动模拟器时传递的额外参数。'],
+  ['Maximum number of logcat lines to keep in the viewer.', '日志查看器中保留的最大行数。'],
+  ['Path to scrcpy binary for screen mirroring. Leave empty for auto-detection.', '屏幕镜像使用的 scrcpy 二进制文件路径。留空则自动检测。'],
+  ['Device polling interval in seconds.', '设备轮询间隔（秒）。'],
+  ['Font size in the logcat viewer (pixels).', '日志查看器中的字体大小（像素）。'],
+  ['Wrap long lines in the logcat viewer.', '在日志查看器中自动换行。'],
+  ['Show hidden files (dotfiles) in the device file explorer.', '在设备文件浏览器中显示隐藏文件。'],
+  ['Default root path when browsing device files.', '浏览设备文件时的默认根路径。'],
+  ['Automatically select newly connected devices as the active device.', '自动选择新连接的设备作为当前设备。'],
+  ['Always cold boot emulators (ignore snapshots).', '始终冷启动模拟器（忽略快照）。'],
+  ['Warn before launching an emulator when the host has less free memory than the virtual device needs.', '当主机可用内存不足时，在启动模拟器前发出警告。'],
+  ['Free memory in megabytes to leave for the host beyond the emulator\'s requirement before warning.', '警告前为主机预留的额外内存（MB）。'],
+  ['Check for hardware acceleration (WHPX, HAXM, or KVM) before the first emulator launch of each session.', '在每个会话首次启动模拟器前检查硬件加速（WHPX、HAXM 或 KVM）。'],
+  ['Capture emulator output to a log file so startup failures can be reported instead of appearing as a hang.', '将模拟器输出捕获到日志文件，以便报告启动失败而非显示为卡住。'],
+  ['How long to wait for Android to finish booting before reporting the emulator as stalled (seconds). A cold boot after a data wipe can take several minutes.', '等待 Android 完成启动的超时时间（秒）。数据擦除后的冷启动可能需要数分钟。'],
+  ['Warn when free host memory runs low while an emulator is running, for example when a build starts alongside it.', '模拟器运行时主机可用内存不足时发出警告。'],
+  ['Free host memory in megabytes below which the running-emulator warning fires. Set to 0 to disable.', '运行中模拟器内存警告的阈值（MB）。设为 0 禁用。'],
+  ['Flag virtual devices configured with less RAM than their system image needs. Modern Google APIs images swap and stop responding below 2560 MB.', '标记 RAM 低于系统图像需求的虚拟设备。现代 Google API 镜像在 2560 MB 以下会卡顿。'],
+  ['GPU rendering mode passed to the emulator as -gpu. Use "swiftshader" if screenshots come out black. An explicit -gpu in caspian.emulatorArgs overrides this.', '传递给模拟器的 GPU 渲染模式（-gpu 参数）。如果截图为黑色，请使用 "swiftshader"。emulatorArgs 中的 -gpu 参数将覆盖此设置。'],
+  ['When a launch fails with a graphics error, retry automatically with software rendering. Only applies when caspian.emulator.gpuMode is "auto".', '启动因图形错误失败时，自动使用软件渲染重试。仅在 gpuMode 为 "auto" 时生效。'],
+  ['When creating a device from a preset, use the newest installed system image at or above the preset\'s API level instead of downloading the exact one.', '从预设创建设备时，使用已安装的、API 级别不低于预设的最新系统镜像，而非下载精确版本。'],
+  ['Report virtual device displays outside a 16:9 to 9:16 aspect ratio as Play Store screenshot problems. Most modern phones are taller than 16:9.', '将宽高比超出 16:9 到 9:16 范围的虚拟设备显示报告为 Play Store 截图问题。大多数现代手机比 16:9 更高。'],
+  ['Directory where capture runs are saved. Supports ${workspaceFolder} and ~. Falls back to your home folder when no workspace is open.', '截图任务保存目录。支持 ${workspaceFolder} 和 ~。没有打开工作区时回退到用户主目录。'],
+  ['Open the capture report when a capture run finishes.', '截图任务完成后打开报告。'],
+  ['Enter screenshot mode during capture runs so the status bar is clean and deterministic.', '截图任务期间进入截图模式，使状态栏干净且确定。'],
+  ['Extra delay after the screen stops changing, before capturing (milliseconds).', '屏幕停止变化后的额外延迟（毫秒）。'],
+  ['Maximum long-side to short-side ratio accepted when validating captures against Play Console rules.', '根据 Play Console 规则验证截图时的最大长宽比。'],
+  ['Font scales preselected when running the locale and accessibility matrix.', '运行多语言与无障碍矩阵时预选的字体大小。'],
+  ['Locale tags offered when running the locale and accessibility matrix, for example en-US or ar.', '运行多语言与无障碍矩阵时提供的语言标签，例如 en-US 或 ar。'],
+  ['When a landscape capture will not rotate, temporarily lower the display density so the launcher treats the device as a tablet. Captures taken this way are marked in the report, because the density is not the device\'s own.', '当横屏截图无法旋转时，临时降低显示密度使启动器将设备视为平板。这样截取的图片会在报告中标注，因为密度并非设备自身的。'],
+  ['Check connecting devices for display, rotation, or screenshot-mode overrides left behind by an interrupted capture run, and offer to clear them.', '检查连接设备上是否存在被中断的截图任务遗留的显示、旋转或截图模式覆盖，并提供清除选项。'],
+  ['Clock shown in screenshot mode, as four digits in 24-hour HHMM form.', '截图模式下显示的时间，24 小时制 HHMM 格式。'],
+  ['Battery percentage shown in screenshot mode.', '截图模式下显示的电池百分比。'],
+  ['Wi-Fi and mobile signal bars shown in screenshot mode.', '截图模式下显示的 Wi-Fi 和移动信号条数。'],
+  ['Hide notification icons in screenshot mode.', '截图模式下隐藏通知图标。'],
+  ['Hide alarm, Bluetooth, location, and other status icons.', '隐藏闹钟、蓝牙、定位和其他状态图标。'],
+];
 // ============================================================
 
 function applyJsonPatch(content: string): string {
