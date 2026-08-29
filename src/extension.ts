@@ -214,8 +214,6 @@ const NOTIFICATIONS: Record<string, string> = {
   'Taking screenshot...': '正在截图...',
   'Installing APK...': '正在安装 APK...',
   'Stopping ': '正在停止 ',
-  '"...': '"...',
-  'Select a device': '选择设备',
   'Select file to upload': '选择要上传的文件',
   'Select language to capture (none = current language only)':
     '选择要截图的语言（留空 = 仅当前语言）',
@@ -239,7 +237,6 @@ const NOTIFICATIONS: Record<string, string> = {
   'Use This Mode': '使用此模式',
   'Set GPU Mode': '设置 GPU 模式',
   'Show Folder': '显示文件夹',
-  'Show Log': '查看日志',
   'Configure': '配置',
   'Open Folder': '打开文件夹',
   'View Report': '查看报告',
@@ -258,7 +255,6 @@ const NOTIFICATIONS: Record<string, string> = {
   'Rename "': '重命名 "',
   '" to:': '" 为：',
   'Delete ': '删除 ',
-  '?': '？',
   'This cannot be undone.': '此操作不可撤销。',
   'Clear all data for ': '清除 ',
   '? This removes login state, preferences, and cached files.':
