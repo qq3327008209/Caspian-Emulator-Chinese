@@ -12,7 +12,8 @@ permissions:
 
 jobs:
   build-and-release:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
 
     steps:
       - uses: actions/checkout@v4
@@ -22,8 +23,8 @@ jobs:
           node-version: '24'
 
       - run: npm install --no-package-lock
-      - run: npm run build
-      - run: npx @vscode/vsce package --allow-missing-repository
+      - run: npm install -g @vscode/vsce
+      - run: npm run build && vsce package --allow-missing-repository --no-dependencies
 
       - uses: softprops/action-gh-release@v2
         with:
