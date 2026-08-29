@@ -12,8 +12,8 @@ permissions:
 
 jobs:
   build-and-release:
-    runs-on: ubuntu-latest          # 改用 Ubuntu，网络更稳定
-    timeout-minutes: 10             # 防止无限卡死
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
 
     steps:
       - uses: actions/checkout@v4
@@ -23,13 +23,9 @@ jobs:
           node-version: '22'
 
       - run: npm install --no-package-lock
-
       - run: npm run build
 
-      # 预安装 vsce（避免运行时下载依赖）
       - run: npm install -g @vscode/vsce
-
-      # 打包，使用 --no-dependencies 跳过额外依赖
       - run: vsce package --allow-missing-repository --no-dependencies
 
       - uses: softprops/action-gh-release@v2
