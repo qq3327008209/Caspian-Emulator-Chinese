@@ -27,6 +27,17 @@ function getMainExtensionPath(): string | undefined {
     return ext.extensionPath;
   }
 
+  // Known real path for this setup
+  const known = path.join(
+    os.homedir(),
+    '.vscode',
+    'extensions',
+    'caspiantools.caspian-emulator-1.4.0',
+  );
+  if (fs.existsSync(known)) {
+    return known;
+  }
+
   // Fallback: search extensions directory
   const candidates = [
     path.join(os.homedir(), '.vscode', 'extensions'),
@@ -38,7 +49,7 @@ function getMainExtensionPath(): string | undefined {
     if (!fs.existsSync(base)) continue;
     try {
       const entries = fs.readdirSync(base, { withFileTypes: true });
-      const dir = entries.find(e => e.isDirectory() && e.name.startsWith('caspian-emulator'));
+      const dir = entries.find(e => e.isDirectory() && (e.name.startsWith('caspian-emulator') || e.name.startsWith('caspiantools.caspian-emulator')));
       if (dir) return path.join(base, dir.name);
     } catch {
       // ignore
@@ -456,12 +467,23 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 
   if (autoApply) {
     try {
-      const msg = await applyChinese();
-      if (getConfig('showNotifications', true)) {
-        vscode.window.showInformationMessage(msg);
+      const extPath = getMainExtensionPath();
+      const pkgPath = extPath ? getMainPackageJsonPath(extPath) : undefined;
+      const backupPath = pkgPath ? pkgPath + BACKUP_SUFFIX : undefined;
+      const needsApply = !backupPath || !fs.existsSync(backupPath);
+
+      if (needsApply) {
+        const msg = await applyChinese();
+        if (getConfig('showNotifications', true)) {
+          vscode.window.showInformationMessage(msg, '重新加载窗口').then(choice => {
+            if (choice === '重新加载窗口') {
+              vscode.commands.executeCommand('workbench.action.reloadWindow');
+            }
+          });
+        }
       }
     } catch (err) {
-      vscode.window.showErrorMessage('Caspian 汉化应用失败：' + (err as Error).message);
+      vscode.window.showErrorMessage('Caspian 汉化应用失败：' + (err instanceof Error ? err.message : err));
     }
   }
 
