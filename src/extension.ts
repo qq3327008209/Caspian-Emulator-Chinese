@@ -150,7 +150,6 @@ const NOTIFICATIONS: Record<string, string> = {
     '"。通常原因：Guest RAM 不足、快照损坏或 GPU 模式与主机不兼容。',
   ' has not finished booting after ': ' 在 ',
   's (': ' 秒后仍未完成启动（',
-  ').': '）。',
   'File to upload': '要上传的文件',
   'Remote destination path': '远程目标路径',
   'No apps selected.': '未选择应用。',
@@ -183,7 +182,6 @@ const NOTIFICATIONS: Record<string, string> = {
   '"...': '"...',
   ' virtual device "': '" 虚拟设备已创建（',
   '" created (': '" 已创建（',
-  ').': '）。',
   'Folding postures are not emulated for non-Google foldables.':
     '非谷歌折叠屏设备的折叠姿态不会被模拟。',
   'Your SDK does not include the "': '你的 SDK 不包含"',
