@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>模拟器屏幕镜像</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: var(--vscode-editor-font-family, sans-serif);
+    background: var(--vscode-editor-background);
+    color: var(--vscode-editor-foreground);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .toolbar {
+    display: flex; gap: 6px; padding: 6px 10px;
+    background: var(--vscode-titleBar-activeBackground);
+    border-bottom: 1px solid var(--vscode-panel-border);
+    align-items: center; flex-shrink: 0;
+  }
+  .toolbar button {
+    background: var(--vscode-button-background);
+    color: var(--vscode-button-foreground);
+    border: none; padding: 4px 12px; cursor: pointer;
+    border-radius: 2px; font-size: 12px;
+  }
+  .toolbar button:hover { background: var(--vscode-button-hoverBackground); }
+  .toolbar button.secondary {
+    background: var(--vscode-button-secondaryBackground);
+    color: var(--vscode-button-secondaryForeground);
+  }
+  .screen-area {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+  }
+  .screen-area img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+  }
+  .status-bar {
+    padding: 4px 10px;
+    font-size: 12px;
+    background: var(--vscode-statusBar-background);
+    color: var(--vscode-statusBar-foreground);
+    border-top: 1px solid var(--vscode-panel-border);
+  }
+  .placeholder {
+    text-align: center;
+    color: var(--vscode-descriptionForeground);
+  }
+  .placeholder .icon { font-size: 48px; margin-bottom: 12px; }
+  .placeholder .msg { font-size: 14px; }
+  .placeholder .sub { font-size: 12px; margin-top: 6px; }
+</style>
+</head>
+<body>
+  <div class="toolbar">
+    <button id="btnRefresh">刷新</button>
+    <button id="btnPause" class="secondary">暂停镜像</button>
+    <button id="btnScreenshot">截图</button>
+  </div>
+  <div class="screen-area" id="screenArea">
+    <div class="placeholder">
+      <div class="icon">📱</div>
+      <div class="msg" id="statusText">等待模拟器...</div>
+      <div class="sub" id="subText">请先在 Caspian 面板中启动模拟器</div>
+    </div>
+  </div>
+  <div class="status-bar" id="statusBar">就绪</div>
+
+  <script>
+    const vscode = acquireVsCodeApi();
+    const statusText = document.getElementById('statusText');
+    const subText = document.getElementById('subText');
+    const statusBar = document.getElementById('statusBar');
+    const btnPause = document.getElementById('btnPause');
+
+    document.getElementById('btnRefresh').addEventListener('click', () => {
+      vscode.postMessage({ type: 'refresh' });
+    });
+
+    btnPause.addEventListener('click', () => {
+      const paused = btnPause.textContent === '恢复镜像';
+      btnPause.textContent = paused ? '暂停镜像' : '恢复镜像';
+      vscode.postMessage({ type: paused ? 'resume' : 'pause' });
+    });
+
+    document.getElementById('btnScreenshot').addEventListener('click', () => {
+      vscode.postMessage({ type: 'screenshot' });
+    });
+
+    window.addEventListener('message', (event) => {
+      const msg = event.data;
+      switch (msg.type) {
+        case 'frame':
+          if (msg.image) {
+            statusText.textContent = msg.serial;
+            subText.textContent = `${msg.width}×${msg.height}`;
+            const img = document.createElement('img');
+            img.src = msg.image;
+            document.getElementById('screenArea').innerHTML = '';
+            document.getElementById('screenArea').appendChild(img);
+          }
+          break;
+        case 'status':
+          statusBar.textContent = msg.text || '就绪';
+          if (msg.text === '暂停') {
+            btnPause.textContent = '恢复镜像';
+          }
+          break;
+        case 'error':
+          statusText.textContent = msg.text || '错误';
+          subText.textContent = '';
+          break;
+      }
+    });
+  </script>
+</body>
+</html>
