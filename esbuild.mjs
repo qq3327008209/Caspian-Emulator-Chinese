@@ -17,7 +17,7 @@ const ctx = await esbuild.context({
   outdir: 'out',
   format: 'cjs',
   platform: 'node',
-  target: 'node20',
+  target: 'node22',
   sourcemap: !isProduction,
   minify: isProduction,
   external: ['vscode'],
@@ -27,10 +27,14 @@ const ctx = await esbuild.context({
   },
 });
 
-if (isWatch) {
-  await ctx.watch();
-  console.log('Watching for changes...');
-} else {
-  await ctx.rebuild();
-  console.log('Build complete.');
+try {
+  if (isWatch) {
+    await ctx.watch();
+    console.log('Watching for changes...');
+  } else {
+    await ctx.rebuild();
+    console.log('Build complete.');
+  }
+} finally {
+  await ctx.dispose();
 }

@@ -2,7 +2,7 @@
 
 为 [Caspian Emulator](https://marketplace.visualstudio.com/items?itemName=CaspianTools.caspian-emulator) 提供**简体中文**界面的 VS Code 扩展。
 
-本汉化包会自动将原扩展的命令、侧边栏、通知与状态栏翻译为中文。继续安装后重启 VS Code 即可看到效果。
+本汉化包通过覆盖主扩展的界面字符串实现汉化，主扩展更新后汉化包会自动重新应用。
 
 仓库地址：https://github.com/qq3327008209/Caspian-Emulator-Chinese
 
@@ -31,11 +31,10 @@ code --install-extension caspian-emulator-chinese-X.Y.Z.vsix
 **必须同时安装 [Caspian Emulator](https://marketplace.visualstudio.com/items?itemName=CaspianTools.caspian-emulator) 扩展。**
 
 汉化插件会在启动后自动：
-- 将命令面板中的命令标题替换为中文
-- 翻译所有通知消息为中文
-- 本地化侧边栏树视图内容
-- 创建中文版日志面板
-- 更新状态栏为中文
+- 将主扩展的 package.json 中的命令、视图、菜单标题替换为中文
+- 翻译主扩展的 bundle 中的运行期通知和 UI 字符串
+- 汉化侧边栏树视图内容
+- 自动备份原始文件，支持一键还原
 
 ## 本地化覆盖范围
 
